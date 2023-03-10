@@ -3,11 +3,23 @@ import Home from "../Assets/Images/home.jpg";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import OAuth from "../Components/OAuth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { db } from "../FireBase";
+import { serverTimestamp, setDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
   // show password Hook
 
   const [showPassword, setShowPassword] = useState(false);
+
+  // Navigate
+  const navigate = useNavigate();
 
   // form data hook
   const [formData, setFormData] = useState({
@@ -27,6 +39,40 @@ export default function SignUp() {
     }));
   };
 
+  // signUp Auth
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    // try catch for firebase data
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+      const user = userCredential.user;
+      // form data copy and time
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      // save copy data in database
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      // success message
+      toast.success("SuccessFully Signed Up");
+      // Adding data to db navigate to home
+      navigate("/");
+    } catch (error) {
+      // adding to tostify to show message
+      toast.error("Something Went Wrong");
+    }
+  }
+
   return (
     <section>
       <h1 className="text-3xl text-center mt-5 font-bold ">Sign Up</h1>
@@ -36,7 +82,7 @@ export default function SignUp() {
           <img src={Home} alt="home" className="w-full rounded-2xl" />{" "}
         </div>
         <div className=" w-full md:w-[70%] lg:w-[40%]">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               className="w-full rounded bg-white border-gray-400 text-lg transition ease-in-out mb-6"
               placeholder="Enter Your Full Name"
