@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Home from "../Assets/Images/home.jpg";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import OAuth from "../Components/OAuth";
 
 export default function SignIn() {
   // show password Hook
@@ -66,7 +67,7 @@ export default function SignIn() {
             </div>
             <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg xs:text-lg ">
               <p className="mb-6">
-                Don't have a account?{" "}
+                Don't have an account?{" "}
                 <Link
                   className="text-red-600 hover:text-red-700 transition duration-200 ease-in-out font-semibold"
                   to="/sign-up"
@@ -83,16 +84,17 @@ export default function SignIn() {
                 </Link>
               </p>
             </div>
+            <button
+              className="w-full bg-blue-600 hover:bg-blue-800 text-white py-3 rounded font-semibold uppercase transition duration-150 ease-in-out shadow-md active:bg-blue-800 "
+              type="submit"
+            >
+              Sign in
+            </button>
+            <div className="my-4 flex items-center before:border-t before:flex-1 before:border-gray-400 after:border-t after:flex-1 after:border-gray-400">
+              <p className="text-center font-semibold mx-4">OR</p>
+            </div>
+            <OAuth />
           </form>
-          <button
-            className="w-full bg-blue-600 hover:bg-blue-800 text-white py-3 rounded font-semibold uppercase transition duration-150 ease-in-out shadow-md active:bg-blue-800 "
-            type="submit"
-          >
-            Sign in
-          </button>
-          <div className="my-4 flex items-center before:border-t before:flex-1 before:border-gray-400 after:border-t after:flex-1 after:border-gray-400">
-            <p className="text-center font-semibold mx-4">OR</p>
-          </div>
         </div>
       </div>
     </section>
