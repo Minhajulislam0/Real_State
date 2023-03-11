@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import Home from "../Assets/Images/home.jpg";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../Components/OAuth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { toast } from "react-toastify";
+import { async } from "@firebase/util";
 
 export default function SignIn() {
+  const navigate = useNavigate();
+
   // show password Hook
 
   const [showPassword, setShowPassword] = useState(false);
@@ -26,6 +31,25 @@ export default function SignIn() {
     }));
   };
 
+  async function onSubmit(e) {
+    e.preventDefault();
+    const auth = getAuth();
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    if (userCredential.user) {
+      toast.success("SuccessFully Signed Up");
+      navigate("/");
+    }
+    try {
+    } catch (error) {
+      toast.error("Invalid Information!");
+    }
+  }
+
   return (
     <section>
       <h1 className="text-3xl text-center mt-5 font-bold ">Sign In</h1>
@@ -35,7 +59,7 @@ export default function SignIn() {
           <img src={Home} alt="home" className="w-full rounded-2xl" />{" "}
         </div>
         <div className=" w-full md:w-[70%] lg:w-[40%]">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               className="w-full rounded bg-white border-gray-400 text-lg transition ease-in-out mb-6"
               placeholder="Enter Your Email Address"

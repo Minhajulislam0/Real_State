@@ -28,6 +28,7 @@ export default function OAuth() {
           timestamp: serverTimestamp(),
         });
       }
+      toast.success("SuccessFully Signed In");
       navigate("/");
     } catch (error) {
       toast.error("Something went wrong!");
