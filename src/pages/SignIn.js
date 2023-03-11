@@ -41,7 +41,7 @@ export default function SignIn() {
     );
 
     if (userCredential.user) {
-      toast.success("SuccessFully Signed Up");
+      toast.success("SuccessFully Signed In");
       navigate("/");
     }
     try {

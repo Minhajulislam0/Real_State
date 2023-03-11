@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import Home from "../Assets/Images/home.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../Components/OAuth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { toast } from "react-toastify";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
+
   // form data hook
   const [resetEmail, setResetEmail] = useState("");
 
@@ -12,6 +16,18 @@ export default function ForgotPassword() {
   const onChange = (e) => {
     setResetEmail(e.target.value);
   };
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, resetEmail);
+      toast.success("ResetEmail Sent Successfully");
+      navigate("/sign-in");
+    } catch (error) {
+      toast.error("ResetEmail Sent Failed");
+    }
+  }
 
   return (
     <section>
@@ -22,7 +38,7 @@ export default function ForgotPassword() {
           <img src={Home} alt="home" className="w-full rounded-2xl" />{" "}
         </div>
         <div className=" w-full md:w-[70%] lg:w-[40%]">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               className="w-full rounded bg-white border-gray-400 text-lg transition ease-in-out mb-6"
               placeholder="Enter Your Email Address"
