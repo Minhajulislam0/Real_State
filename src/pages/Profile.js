@@ -30,6 +30,18 @@ export default function Profile() {
               disabled
               className="mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out"
             />
+
+            <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg">
+              <p className="flex items-center">
+                Do you Want To Change your Name?
+                <span className="text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer">
+                  Edit
+                </span>
+              </p>
+              <p className="text-blue-600 hover:text-blue-700 transition ease-in-out duration-200 cursor-pointer">
+                Sign Out
+              </p>
+            </div>
           </form>
         </div>
       </section>
