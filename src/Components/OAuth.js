@@ -32,7 +32,6 @@ export default function OAuth() {
       navigate("/");
     } catch (error) {
       toast.error("Something went wrong!");
-      console.log(error);
     }
   }
 
