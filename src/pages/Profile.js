@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { getAuth } from "firebase/auth";
 
 export default function Profile() {
+  const auth = getAuth();
+
   const [formData, setFormData] = useState({
-    name: "Mishu",
-    email: "mishu@gmail.com",
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
   });
 
   const { name, email } = formData;
