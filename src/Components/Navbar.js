@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { getAuth } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [pageState, setPageState] = useState("Sign in");
+
+  const auth = getAuth();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setPageState("Profile");
+      } else {
+        setPageState("Sign in");
+      }
+    });
+  }, [auth]);
 
   function pathMarker(route) {
     if (route === location.pathname) {
@@ -41,12 +56,12 @@ export default function Navbar() {
             </li>
             <li
               className={`cursor-pointer py-3 text-sm font-semibold ${
-                pathMarker("/sign-in") &&
+                (pathMarker("/sign-in") || pathMarker("/profile")) &&
                 "border-b-[3px] text-black border-b-red-500"
               } `}
-              onClick={() => navigate("/sign-in")}
+              onClick={() => navigate("/profile")}
             >
-              SignIn
+              {pageState}
             </li>
           </ul>
         </div>
