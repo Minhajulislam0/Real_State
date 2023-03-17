@@ -21,6 +21,7 @@ export default function Listing() {
     discountPrice: 0,
     latitude: 0,
     longitude: 0,
+    images: {},
   });
   const {
     type,
@@ -36,6 +37,7 @@ export default function Listing() {
     discountPrice,
     latitude,
     longitude,
+    images,
   } = formData;
   const onChange = (e) => {
     let boolean = null;
@@ -69,8 +71,13 @@ export default function Listing() {
     if (discountPrice >= regularPrice) {
       setLoading(false);
       toast.error("Discounted Price Needs To Be Less Than Regular Price");
+      return;
     }
-    return;
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error("Six(6) Images Are Allowed");
+      return;
+    }
   };
 
   if (loading) {
