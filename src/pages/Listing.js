@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import Spinner from "../Components/Spinner";
 
 export default function Listing() {
+  const [locationEnabled, setLocationEnabled] = useState(true);
+
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     type: "rent",
     name: "",
@@ -11,8 +17,10 @@ export default function Listing() {
     address: "",
     description: "",
     offer: true,
-    regularPrice: "0",
-    discountPrice: "0",
+    regularPrice: 0,
+    discountPrice: 0,
+    latitude: 0,
+    longitude: 0,
   });
   const {
     type,
@@ -26,6 +34,8 @@ export default function Listing() {
     offer,
     regularPrice,
     discountPrice,
+    latitude,
+    longitude,
   } = formData;
   const onChange = (e) => {
     let boolean = null;
@@ -53,10 +63,24 @@ export default function Listing() {
     }
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (discountPrice >= regularPrice) {
+      setLoading(false);
+      toast.error("Discounted Price Needs To Be Less Than Regular Price");
+    }
+    return;
+  };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <main className="max-w-md px-2 mx-auto">
       <h1 className="text-3xl text-center mt-6 font-bold">Create Listing</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         {/* Sell / Rent */}
 
         <p className=" text-lg mt-6 font-semibold ">Sell / Rent</p>
@@ -101,7 +125,7 @@ export default function Listing() {
           minLength="6"
           required
           onChange={onChange}
-          className="rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+          className="w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
         />
 
         {/* beds & bath */}
@@ -117,7 +141,7 @@ export default function Listing() {
               max="10"
               required
               onChange={onChange}
-              className="text-center font-semibold rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+              className="text-center font-semibold w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
             />
           </div>
           <div className="ml-3">
@@ -130,7 +154,7 @@ export default function Listing() {
               max="10"
               required
               onChange={onChange}
-              className=" text-center font-semibold rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+              className=" text-center font-semibold w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
             />
           </div>
         </div>
@@ -203,9 +227,38 @@ export default function Listing() {
           minLength="6"
           required
           onChange={onChange}
-          className="rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+          className="rounded w-full bg-white border-gray-400 text-lg transition ease-in-out"
         />
-
+        {!locationEnabled && (
+          <div className="flex space-x-5">
+            <div className="">
+              <p className="text-lg mt-6 font-semibold">Latitude</p>
+              <input
+                type="number"
+                id="latitude"
+                value={latitude}
+                onChange={onChange}
+                required
+                min="-90"
+                max="90"
+                className=" w-full text-center font-semibold rounded bg-white border-gray-400 text-lg transition ease-in-out"
+              />
+            </div>
+            <div className="">
+              <p className="text-lg mt-6 font-semibold">Longitude</p>
+              <input
+                type="number"
+                id="longitude"
+                value={longitude}
+                onChange={onChange}
+                required
+                min="-180"
+                max="180"
+                className="w-full text-center font-semibold rounded bg-white border-gray-400 text-lg transition ease-in-out"
+              />
+            </div>
+          </div>
+        )}
         {/* Description */}
 
         <p className="text-lg mt-6 font-semibold ">Description</p>
@@ -218,7 +271,7 @@ export default function Listing() {
           minLength="6"
           required
           onChange={onChange}
-          className="rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+          className="w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
         />
 
         {/* Offer */}
@@ -262,7 +315,7 @@ export default function Listing() {
               max="1000000"
               required
               onChange={onChange}
-              className="w-full text-center font-semibold rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+              className="w-full text-center font-semibold rounded bg-white border-gray-400 text-lg transition ease-in-out"
             />
             {type === "rent" && (
               <div className="text-md w-full whitespace-nowrap">
@@ -287,7 +340,7 @@ export default function Listing() {
                 max="1000000"
                 required
                 onChange={onChange}
-                className="w-full text-center font-semibold rounded w-full rounded bg-white border-gray-400 text-lg transition ease-in-out"
+                className="w-full text-center font-semibold rounded bg-white border-gray-400 text-lg transition ease-in-out"
               />
               {type === "rent" && (
                 <div className="text-md w-full whitespace-nowrap">
