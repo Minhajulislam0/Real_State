@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function Listing() {
   const [formData, setFormData] = useState({
-    type: "sall",
+    type: "rent",
     name: "",
     bedrooms: "1",
     bathrooms: "1",
@@ -27,7 +27,31 @@ export default function Listing() {
     regularPrice,
     discountPrice,
   } = formData;
-  const onChange = () => {};
+  const onChange = (e) => {
+    let boolean = null;
+    // for Boolean data
+    if (e.target.value === "true") {
+      boolean = true;
+    }
+    if (e.target.value === "false") {
+      boolean = false;
+    }
+
+    // for Image data
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }));
+    }
+    // text/ boolean/number
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value,
+      }));
+    }
+  };
 
   return (
     <main className="max-w-md px-2 mx-auto">
@@ -43,7 +67,7 @@ export default function Listing() {
             value="sale"
             onClick={onChange}
             className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
-              !type === "rent"
+              type === "rent"
                 ? "bg-white text-black"
                 : "bg-slate-600 text-white"
             } `}
@@ -56,7 +80,7 @@ export default function Listing() {
             value="rent"
             onClick={onChange}
             className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
-              type === "rent"
+              type === "sale"
                 ? "bg-white text-black"
                 : "bg-slate-600 text-white"
             } `}
