@@ -65,7 +65,7 @@ export default function Listing() {
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     if (discountPrice >= regularPrice) {
@@ -77,6 +77,27 @@ export default function Listing() {
       setLoading(false);
       toast.error("Six(6) Images Are Allowed");
       return;
+    }
+    let geoLocation = {};
+    let location;
+    if (locationEnabled) {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_LOCATION_API_KEY}`
+      );
+      const data = await response.json();
+      console.log(data);
+      geoLocation.lat = data.results[0]?.geometry.location.lat ?? 0;
+      geoLocation.lng = data.results[0]?.geometry.location.lng ?? 0;
+
+      location = data.status === "ZERO_RESULTS" && undefined;
+      if (location === undefined || location.includes("undefined")) {
+        setLoading(false);
+        toast.error("Please enter a correct address");
+        return;
+      }
+    } else {
+      geoLocation.lat = latitude;
+      geoLocation.lng = longitude;
     }
   };
 
