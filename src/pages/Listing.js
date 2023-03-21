@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../Components/Spinner";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Listing() {
+  const auth = getAuth();
+
   const [locationEnabled, setLocationEnabled] = useState(true);
 
   const [loading, setLoading] = useState(false);
@@ -99,6 +109,22 @@ export default function Listing() {
       geoLocation.lat = latitude;
       geoLocation.lng = longitude;
     }
+
+    async function storeImage(image) {
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+      });
+    }
+
+    const imgURL = await Promise.all(
+      [...images]
+        .map((image) => storeImage(image))
+        .catch((error) => {
+          setLoading(false);
+          toast.error("Images Not Uploaded");
+        })
+    );
   };
 
   if (loading) {
