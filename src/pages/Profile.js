@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getAuth, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { db } from "../FireBase";
 import {
+  collection,
   doc,
   getDocs,
   orderBy,
@@ -13,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { FcHome } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import ListingItems from "../Components/ListingItems";
 
 export default function Profile() {
   const auth = getAuth();
@@ -142,6 +144,22 @@ export default function Profile() {
           </button>
         </div>
       </section>
+      <div className="max-w6xl px-3 mt-6 mx-auto">
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="text-2xl text-center font-semibold"> My Listings</h2>
+            <ul>
+              {listings.map((listing) => (
+                <ListingItems
+                  key={listing.id}
+                  id={listing.id}
+                  listing={listing.data}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </>
   );
 }
