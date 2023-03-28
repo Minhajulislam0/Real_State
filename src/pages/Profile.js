@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { db } from "../FireBase";
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -84,6 +85,21 @@ export default function Profile() {
     fetchUserListing();
   }, [auth.currentUser.uid]);
 
+  const onEdit = (listingID) => {
+    navigate(`/edit-listing/${listingID}`);
+  };
+
+  const onDelete = async (listingID) => {
+    if (window.confirm("Are you sure you want to delete?")) {
+      await deleteDoc(doc(db, "listings", listingID));
+      const updatedListings = listings.filter(
+        (listing) => listing.id !== listingID
+      );
+      setListings(updatedListings);
+      toast.success("Deleted Successfully.");
+    }
+  };
+
   return (
     <>
       <section className="mx-auto max-w-6xl flex justify-center items-center flex-col">
@@ -154,6 +170,8 @@ export default function Profile() {
                   key={listing.id}
                   id={listing.id}
                   listing={listing.data}
+                  onDelete={() => onDelete(listing.id)}
+                  onEdit={() => onEdit(listing.id)}
                 />
               ))}
             </ul>
