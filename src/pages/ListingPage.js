@@ -86,7 +86,7 @@ export default function ListingPage() {
       )}
 
       <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:space-x-5">
-        <div className="w-full h-[200px] lg-[400px]">
+        <div className="w-full ">
           <p className="text-2xl font-bold mb-3 text-yellow-600">
             {listing.name} - $
             {listing.offer
@@ -117,7 +117,7 @@ export default function ListingPage() {
             <span className="font-semibold">Description - </span>
             {listing.description}
           </p>
-          <ul className="flex items-center space-x-2 lg:space-x-10 font-semibold">
+          <ul className="flex items-center space-x-2 lg:space-x-10 font-semibold mb-4">
             <li className="flex items-center whitespace-normal">
               <FaBed className="text-lg mr-1" />
               {listing.bedrooms > 1 ? ` ${listing.bedrooms} Beds` : "1 Bed"}
