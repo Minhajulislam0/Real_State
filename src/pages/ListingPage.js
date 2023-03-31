@@ -19,8 +19,10 @@ import {
   FaParking,
   FaChair,
 } from "react-icons/fa";
+import { getAuth } from "firebase/auth";
 
 export default function ListingPage() {
+  const auth = getAuth();
   const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -131,9 +133,13 @@ export default function ListingPage() {
               {listing.furnished ? "Furnished" : "Not Furnished"}
             </li>
           </ul>
-          <button className="px-7 py-3 bg-blue-600 text-white font-medium rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out">
-            Contact Landlord
-          </button>
+          {listing.userRef !== auth.currentUser?.uid && (
+            <div className="mt-6">
+              <button className="px-7 py-3 bg-blue-600 text-white font-medium rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out">
+                Contact Landlord
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="bg-green-300 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden"></div>
