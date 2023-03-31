@@ -20,6 +20,7 @@ import {
   FaChair,
 } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
+import Contact from "../Components/Contact";
 
 export default function ListingPage() {
   const auth = getAuth();
@@ -27,6 +28,7 @@ export default function ListingPage() {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
+  const [contactLandLord, setContactLandLord] = useState(false);
   SwiperCore.use([Autoplay, Navigation, Pagination]);
   useEffect(() => {
     async function fetchListing() {
@@ -133,12 +135,18 @@ export default function ListingPage() {
               {listing.furnished ? "Furnished" : "Not Furnished"}
             </li>
           </ul>
-          {listing.userRef !== auth.currentUser?.uid && (
+          {listing.userRef !== auth.currentUser?.uid && !contactLandLord && (
             <div className="mt-6">
-              <button className="px-7 py-3 bg-blue-600 text-white font-medium rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out">
+              <button
+                onClick={() => setContactLandLord(true)}
+                className="px-7 py-3 bg-blue-600 text-white font-medium rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out"
+              >
                 Contact Landlord
               </button>
             </div>
+          )}
+          {contactLandLord && (
+            <Contact userRef={listing.userRef} listing={listing} />
           )}
         </div>
 
