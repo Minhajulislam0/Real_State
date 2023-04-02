@@ -141,9 +141,9 @@ export default function Home() {
             </h2>
             <Link
               className="px-3 text-sm text-blue-600 mt-6 font-semibold hover:text-blue-800 transition duration-150 ease-in-out"
-              to={"/offers"}
+              to={"/category/rent"}
             >
-              Show More Offers
+              Show More Rent Offers
             </Link>
             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {rentListings.map((listing) => (
@@ -163,9 +163,9 @@ export default function Home() {
             <h2 className="px-3 text-2xl mt-6 font-semibold">Places to Sell</h2>
             <Link
               className="px-3 text-sm text-blue-600 mt-6 font-semibold hover:text-blue-800 transition duration-150 ease-in-out"
-              to={"/offers"}
+              to={"/category/sale"}
             >
-              Show More Offers
+              Show More Sale Offers
             </Link>
             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {saleListings.map((listing) => (
