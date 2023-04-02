@@ -2,10 +2,21 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "./../FireBase";
 import Spinner from "./../Components/Spinner";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, {
+  EffectFade,
+  Autoplay,
+  Navigation,
+  Pagination,
+} from "swiper";
+import "swiper/css/bundle";
+import { useNavigate } from "react-router-dom";
 
 export default function Slider() {
+  const navigate = useNavigate();
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
+  SwiperCore.use([Autoplay, Navigation, Pagination]);
   useEffect(() => {
     async function fetchListing() {
       const listingRef = collection(db, "listings");
@@ -31,5 +42,47 @@ export default function Slider() {
   if (listings.length === 0) {
     return <></>;
   }
-  return <div>Slider</div>;
+  return (
+    listings && (
+      <>
+        <Swiper
+          slidesPerView={1}
+          navigation
+          pagination={{ type: "progressbar" }}
+          effect="fade"
+          modules={EffectFade}
+          autoplay={{ delay: 2000 }}
+        >
+          {listings.map(({ data, id }) => (
+            <SwiperSlide
+              key={id}
+              onClick={() => navigate(`/category/${data.type}/${id}`)}
+            >
+              <div
+                style={{
+                  background: `url(${data.imgUrls[0]}) center, no-repeat`,
+                  backgroundSize: "cover",
+                }}
+                className="relative w-full h-[300px] overflow-hidden"
+              ></div>
+              <p className="text-[#f1faee] absolute left-1 top-3 font-medium mx-w-[90%] bg-yellow-600 px-4 shadow-lg opacity-90 rounded-br-3xl">
+                {data.name}
+              </p>
+
+              <p className="text-[#f1faee] absolute left-1 bottom-1 font-semibold mx-w-[90%] bg-green-600 px-4 shadow-lg opacity-90 rounded-tr-3xl">
+                $
+                {data.discountedPrice
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") ??
+                  data.regularPrice
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                {data.type === "rent" && " / month"}
+              </p>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </>
+    )
+  );
 }
