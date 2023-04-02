@@ -33,7 +33,7 @@ export default function Navbar() {
           className=" cursor-pointer text-2xl font-bold  text-violet-500"
           onClick={() => navigate("/")}
         >
-          Real<span className="text-red-400">State</span>
+          Asset<span className="text-red-400">Exchange</span>
         </div>
         <div>
           <ul className="flex space-x-10 text-gray-400">
